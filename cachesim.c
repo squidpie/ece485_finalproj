@@ -8,14 +8,15 @@
 
 int main()
 {
-    printf("Hello, world!\n");
-
     Trace t;
+    t.traceType = 0;
+    t.address = 0;
 
     open_trace("traces/test1.trace");
 
-    next_trace(&t);
+    while(!next_trace(&t))
+        printf("Action: %d Addr: %x\n", t.traceType, t.address);
 
-    printf("Trace: %d\n", t.traceType);
+    close_trace();
 }
 

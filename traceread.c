@@ -17,17 +17,18 @@ void close_trace(void)
     fclose(tracestream);
 }
 
-void next_trace(Trace* t)
+int next_trace(Trace* t)
 {
+    //Get next line from file
     fgets(tracebuffer, TRACELINELENGTH, tracestream);
-    
-    parse_line(tracebuffer, t);    
+
+    //Check if EOF reached
+    if(feof(tracestream))
+        return -1;
+
+    //Parse line into Trace
+    sscanf(tracebuffer, "%d %x", &t->traceType, &t->address);
+
+    return 0;
 }
 
-int parse_line(char *buffer, Trace *t)
-{
-   strcmp(buffer[0], "0");
-
-    t->traceType = WRITE;
-    t->address = 0;
-}
