@@ -1,6 +1,6 @@
-﻿#ifndef L2_STUB
-#define L2_STUB
+﻿#ifndef __L2_H__
+#define __L2_H__
 
 int L2_fetch(double);
 
-#endif
+#endif // __L2_H__
