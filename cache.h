@@ -42,7 +42,7 @@ typedef struct {
 
 typedef struct {
 
-    uint16_t lineTags[4];       //low order 14 bits for tag, 2 high order bits for mesi
+    uint16_t line_tags[4];       //low order 14 bits for tag, 2 high order bits for mesi
     uint8_t set_info;           //LRU bits
 
 } DataCacheSet;

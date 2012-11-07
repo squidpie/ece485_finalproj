@@ -16,7 +16,7 @@ void cache_i_init(void)
         L1I.sets[i].line_tags[0] = 0;
         L1I.sets[i].line_tags[1] = 0;
 
-        set_info = 0;        
+        L1I.sets[i].set_info = 0;        
     }
 }
 
@@ -31,6 +31,6 @@ void cache_d_init(void)
         L1D.sets[i].line_tags[2] = 0;
         L1D.sets[i].line_tags[2] = 0;
 
-        set_info = 0;        
+        L1D.sets[i].set_info = 0;        
     }
 }
