@@ -35,14 +35,14 @@
 
 typedef struct {
 
-    uint16_t[2] line_tags;      //14 bits tag, high order 2 bits always 0
+    uint16_t line_tags[2];      //14 bits tag, high order 2 bits always 0
     uint8_t set_info;           //valid and LRU bits 
 
 } InstrCacheSet;
 
 typedef struct {
 
-    uint16_t[4] lineTags;       //low order 14 bits for tag, 2 high order bits for mesi
+    uint16_t lineTags[4];       //low order 14 bits for tag, 2 high order bits for mesi
     uint8_t set_info;           //LRU bits
 
 } DataCacheSet;
@@ -50,17 +50,22 @@ typedef struct {
 
 typedef struct {
 
-    InstrCacheSet[ICACHE_NUMSETS] sets;
+    InstrCacheSet sets[ICACHE_NUMSETS];
 
 } L1InstrCache;
 
 typedef struct {
 
-    DataCacheSet[DCACHE_NUMSETS] sets;
+    DataCacheSet sets[DCACHE_NUMSETS]; 
 
 } L1DataCache;
 
 // Public Methods
+// Initialization
+void cache_i_init(void);
+void cache_d_init(void);
+
+// Cache Functions
 void cache_read(int address);
 void cache_write(int address);
 void cache_fetch(int address);
