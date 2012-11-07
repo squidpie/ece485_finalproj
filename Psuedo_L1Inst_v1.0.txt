@@ -1,0 +1,60 @@
+L1 Instruction Cache
+
+Receive incoming address request
+
+	Split address request into three variables
+
+		Req_Index = lower 20 bits of address request
+
+		Tag = upper 12 bits of address request 
+
+		ReadWrite = part of address request ( can be 2-read, 3-invalidate, 8-clear, 9-print) 
+
+
+	Case ( ReadWrite ) 
+
+		Case  (2) 
+			
+			increment CacheREAD to keep track of number of reads 
+	
+			Cache_index = pointer to base address of index array
+
+			Cache_index = Cache_index + Req_Index 
+
+
+			If valid bit of either way of Cache_index[i] is 1(or true) data is valid
+				Then compare Tags
+					If Tags match for either way
+						Increment CacheHIT to keep track of # of hits
+						read data
+						update LRU state			
+
+					else neither tags match
+						Increment CacheMISS to keep track of # of misses
+						then send current indexed data from L1 to L2. 
+						Request new data from L2 and load into L1
+						Update LRU 	
+		
+				Else both valid bits of Cache_index[i] is 0(or false) data is invalid
+					Increment CacheMISS		
+					Then Request data from L2
+					Load data into cache
+					Update LRU
+	
+
+		Case (3)
+
+
+		Case (8)
+			For loop through Cache_index[] until end of array
+				Clear
+			end loop
+	
+		Case(9) 
+			Print cacheREAD			Print cacheHIT				Print cacheMISS
+			Print cacheHIT/(cacheMISS + cacheHIT)
+
+end Case
+		
+
+	
