@@ -76,5 +76,7 @@ void cache_print(void);
 // Priate Methods
 
 // Private Variables
+static L1InstrCache L1I;
+static L1DataCache L1D;
 
 #endif //__CACHE_H__
