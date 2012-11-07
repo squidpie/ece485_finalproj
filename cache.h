@@ -4,6 +4,9 @@
 // Definition of cache module
 //===============================================
 
+#ifndef __CACHE_H__
+#define __CACHE_H__
+
 #include <stdint.h>
 
 //Constants
@@ -69,3 +72,4 @@ void cache_print(void);
 
 // Private Variables
 
+#endif //__CACHE_H__

@@ -4,6 +4,9 @@
 // Trace reader module
 //===============================================
 
+#ifndef __TRACEREAD_H__
+#define __TRACEREAD_H__
+
 #include <stdio.h>
 #include <string.h>
 
@@ -19,3 +22,5 @@ void close_trace();
 int read_next(Trace *t);
 
 static int parse_line(char *buffer, Trace *t);
+
+#endif //__TRACEREAD_H__

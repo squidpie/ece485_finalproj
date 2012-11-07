@@ -1,8 +1,11 @@
 //-----------------------------------------------
-// trace.c
+// trace.h
 //
 // trace structure definition
 //-----------------------------------------------
+
+#ifndef __TRACE_H__
+#define __TRACE_H__
 
 enum TraceAction {
     READ = 0,
@@ -17,3 +20,5 @@ typedef struct {
     unsigned int address;
     enum TraceAction traceType;
 } Trace;
+
+#endif //__TRACE_H__
