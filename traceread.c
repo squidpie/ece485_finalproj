@@ -1,7 +1,7 @@
 //===============================================
 // traceread.c
 //
-// 
+// Reads traces from input file 
 //===============================================
 
 #include "traceread.h"
@@ -9,7 +9,7 @@
 int open_trace(char *filename)
 {
     if(!(tracestream = fopen(filename, "r")))
-        return NULL;
+        return 0;
 }
 
 void close_trace(void)
@@ -27,7 +27,7 @@ int next_trace(Trace* t)
         return -1;
 
     //Parse line into Trace
-    sscanf(tracebuffer, "%d %x", &t->traceType, &t->address);
+    sscanf(tracebuffer, "%d %x", (int*)&t->traceType, &t->address);
 
     return 0;
 }

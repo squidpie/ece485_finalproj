@@ -1,13 +1,20 @@
+CC = gcc
+CFLAGS = -g
+OBJECTS = cachesim.o traceread.o cache.o
+
 default: cachesim
 
-cachesim: cachesim.o traceread.o
-	gcc cachesim.o traceread.o -o cachesim
+cachesim: $(OBJECTS)
+	$(CC) $(OBJECTS) -o cachesim
 
 cachesim.o: cachesim.c
-	gcc -c cachesim.c
+	$(CC) -c cachesim.c
+
+cache.o: cache.c cache.h
+	$(CC) -c cache.c
 
 traceread.o: traceread.c traceread.h
-	gcc -c traceread.c
+	$(CC) -c traceread.c
 
 clean:
 	rm -rf *.o cachesim

@@ -8,6 +8,7 @@
 
 int main()
 {
+    //init trace struct
     Trace t;
     t.traceType = 0;
     t.address = 0;
