@@ -33,6 +33,12 @@
 #define D_MESI0 1 << 14  //mask for mesi bit 0
 #define D_MESI1 1 << 15  //mask for mesi bit 1
 
+// MESI States
+#define MESI_MODIFIED   0x3 << 14
+#define MESI_EXCLUSIVE  0x1 << 14
+#define MESI_SHARED     0x2 << 14
+#define MESI_INVALID    0x0
+
 typedef struct {
 
     uint16_t line_tags[2];      //12 bits tag, high order 4 bits always 0
