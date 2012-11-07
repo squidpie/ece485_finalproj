@@ -28,21 +28,21 @@
 #define D_LRU13 1 << 4  //mask for LRU bit 13
 #define D_LRU23 1 << 5  //mask for LRU bit 23
 
-#define D_TAG 0x3F      //mask for tag bits
-#define D_MESI 0xC0     //mask for mesi bits
-#define D_MESI0 1 << 6  //mask for mesi bit 0
-#define D_MESI1 1 << 7  //mask for mesi bit 1
+#define D_TAG 0x0FFF      //mask for tag bits
+#define D_MESI 0xC000     //mask for mesi bits
+#define D_MESI0 1 << 14  //mask for mesi bit 0
+#define D_MESI1 1 << 15  //mask for mesi bit 1
 
 typedef struct {
 
-    uint16_t line_tags[2];      //14 bits tag, high order 2 bits always 0
+    uint16_t line_tags[2];      //12 bits tag, high order 4 bits always 0
     uint8_t set_info;           //valid and LRU bits 
 
 } InstrCacheSet;
 
 typedef struct {
 
-    uint16_t line_tags[4];       //low order 14 bits for tag, 2 high order bits for mesi
+    uint16_t line_tags[4];      //low order 12 bits for tag, 2 high order bits for mesi
     uint8_t set_info;           //LRU bits
 
 } DataCacheSet;
