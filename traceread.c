@@ -26,6 +26,10 @@ int next_trace(Trace* t)
     if(feof(tracestream))
         return -1;
 
+    //zero trace values
+    t->traceType = 0;
+    t->address = 0; 
+    
     //Parse line into Trace
     sscanf(tracebuffer, "%d %x", (int*)&t->traceType, &t->address);
 
