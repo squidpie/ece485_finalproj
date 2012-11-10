@@ -68,7 +68,7 @@ void cache_i_init(void);
 void cache_d_init(void);
 
 // Cache Functions
-void cache_read(int address);
+uint32_t cache_read(int address);
 void cache_write(int address);
 void cache_fetch(int address);
 void cache_invalidate(int address);
