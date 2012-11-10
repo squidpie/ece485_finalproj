@@ -51,12 +51,14 @@ typedef struct {
 typedef struct {
 
     InstrCacheSet sets[ICACHE_NUMSETS];
+	CacheStats * stats;
 
 } L1InstrCache;
 
 typedef struct {
 
     DataCacheSet sets[DCACHE_NUMSETS]; 
+	CacheStats  * stats;
 
 } L1DataCache;
 
