@@ -9,6 +9,8 @@
 
 #include <stdint.h>
 
+#include "cachestats.h"
+
 //Constants
 #define ICACHE_NUMSETS 16384
 #define DCACHE_NUMSETS 16384
@@ -70,8 +72,10 @@ typedef struct {
 
 // Public Methods
 // Initialization
-void cache_i_init(void);
-void cache_d_init(void);
+void cache_i_init(CacheStats *statsAddr);
+void cache_d_init(CacheStats *statsAddr);
+
+
 
 // Cache Functions
 uint32_t cache_read(int address);
