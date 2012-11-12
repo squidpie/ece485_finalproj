@@ -57,12 +57,14 @@ typedef struct {
 typedef struct {
 
     InstrCacheSet sets[ICACHE_NUMSETS];
+	CacheStats * stats;
 
 } L1InstrCache;
 
 typedef struct {
 
     DataCacheSet sets[DCACHE_NUMSETS]; 
+	CacheStats  * stats;
 
 } L1DataCache;
 
@@ -72,7 +74,7 @@ void cache_i_init(void);
 void cache_d_init(void);
 
 // Cache Functions
-void cache_read(int address);
+uint32_t cache_read(int address);
 void cache_write(int address);
 void cache_fetch(int address);
 void cache_invalidate(int address);
