@@ -10,8 +10,8 @@ cachesim: $(OBJECTS)
 cachesim.o: cachesim.c
 	$(CC) -c cachesim.c
 
-cache.o: cache.c cache.h
-	$(CC) -c cache.c
+cache.o: cache.c cache.h cacheprint.c
+	$(CC) -c cache.c cacheprint.c
 
 traceread.o: traceread.c traceread.h
 	$(CC) -c traceread.c

@@ -81,8 +81,6 @@ typedef struct {
 void cache_i_init(CacheStats *statsAddr);
 void cache_d_init(CacheStats *statsAddr);
 
-
-
 // Cache Functions
 uint8_t cache_read(int address);
 void cache_write(int address, uint8_t data);
