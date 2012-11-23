@@ -1,7 +1,7 @@
 ﻿#include "L2.h"
 #include <stdio.h>
 
-uint32_t _L2_service(uint32_t address, CacheStats * statsAddr, int RW) {
+void _L2_service(uint32_t address,uint8_t * dataHead,  CacheStats * statsAddr, int RW) {
 	
 	static CacheStats * L2_stats;
 	uint32_t mask = 0xF << 28;
@@ -40,5 +40,11 @@ uint32_t _L2_service(uint32_t address, CacheStats * statsAddr, int RW) {
 			mask = mask >> 4;
 		}
 	}	
-	return reversed;
+	
+	if (dataHead) {
+		dataHead[0] = reversed
+		for (i = 4; i < 64; i++) {
+			dataHead[i] = i; 
+		}
+	}
 }
