@@ -2,6 +2,10 @@
 
 #include "cache.h"
 
+static void print_datacache(void);
+static void print_instrcache(void);
+static void print_icacheset(uint16_t index, InstrCacheSet * set);
+
 void cache_print(void)
 {
     printf("L1 Data Cache Contents: \n");        
@@ -25,7 +29,7 @@ static void print_instrcache(void)
     {
         //If any line in the set is valid, print the set
         if(L1I.sets[i].lines[0].tag & VALID || L1I.sets[i].lines[1].tag & VALID)
-            print_icacheset(L1I.sets[i]);
+            print_icacheset(i, &L1I.sets[i]);
     }
 }
 
