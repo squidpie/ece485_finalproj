@@ -9,15 +9,12 @@ void _L2_service(uint32_t address, uint8_t * dataHead,  CacheStats * statsAddr, 
 	int shift = 28;
 	int i;
 
-	printf("stats address = %X\n", statsAddr);	
 
 	if (statsAddr != NULL) { 
 		L2_stats = statsAddr;
-		printf("L2_stats static pointer assigned\n");
 		return;	
 	}
 
-	printf ("Entering RW mode\n");
 	(RW) ? L2_stats->cache_reads++ : L2_stats->cache_writes++; 
 	
 	if ((((double)rand()/(double)RAND_MAX) - L2_HIT_RATE) < 0) {

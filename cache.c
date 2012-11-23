@@ -20,7 +20,6 @@ void cache_i_init(CacheStats * statsAddr)
 		}
         L1I.sets[i].set_info = 0;        
     }
-	printf("L1I address = %X\n", statsAddr);	
 	L1I.stats = statsAddr;
 }
 
