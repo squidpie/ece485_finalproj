@@ -19,7 +19,7 @@ void cache_i_init(CacheStats * statsAddr)
         L1I.sets[i].set_info = 0;        
     }
 	
-	stats = statsAddr;
+	L1I.stats = statsAddr;
 }
 
 void cache_d_init(CacheStats * statsAddr)
@@ -36,7 +36,7 @@ void cache_d_init(CacheStats * statsAddr)
         L1D.sets[i].set_info = 0;        
     }
 	
-	stats = statsAddr;
+	L1D.stats = statsAddr;
 }
 
 

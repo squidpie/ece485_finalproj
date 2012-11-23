@@ -9,9 +9,14 @@
 
 #include <stdint.h>
 
+#include "cachestats.h"
+
 //Constants
 #define ICACHE_NUMSETS 16384
 #define DCACHE_NUMSETS 16384
+
+#define ICACHE_ASSOC    2
+#define DCACHE_ASSOC    4
 
 // Cache Data Structure
 
@@ -27,27 +32,30 @@
 #define D_LRU23 1 << 5  //mask for LRU bit 23
 
 // Mask constants for finding Tag and Index values 
-#define TAG 0xFFF00000      //mask for tag bits
-#define INDEX 0xFFFC0     //mask for cache index
-#define OFFSET 0x3F			// Mask for data index
-#define VALID 0x8000		// mask for valid from tag
+#define TAG     0xFFF00000      //mask for tag bits
+#define INDEX   0xFFFC0         //mask for cache index
+#define OFFSET  0x3F			// Mask for data index
+#define VALID   0x8000		    // mask for valid from tag
+
+#define TAG_SHIFT   24
+#define INDEX_SHIFT 6
 
 typedef struct {
 	uint16_t tag;		// Tag is lower 12 bits, Valid is MSB
-	uint8_t data[64]; // Byte addressable data 
+	uint8_t data[64];   // Byte addressable data 
 } line;
 
 typedef struct {
 
-   line lines[2];					 // Line entries 
-	uint8_t set_info;           // LRU bits 
+   line lines[2];		    // Line entries 
+	uint8_t set_info;       // LRU bits 
 
 } InstrCacheSet;
 
 typedef struct {
 
-    line lines[4];      //low order 12 bits for tag, 2 high order bits for mesi
-    uint8_t set_info;           //LRU bits
+    line lines[4];          //low order 12 bits for tag, 2 high order bits for mesi
+    uint8_t set_info;       //LRU bits
 
 } DataCacheSet;
 
@@ -67,13 +75,15 @@ typedef struct {
 
 // Public Methods
 // Initialization
-void cache_i_init(void);
-void cache_d_init(void);
+void cache_i_init(CacheStats *statsAddr);
+void cache_d_init(CacheStats *statsAddr);
+
+
 
 // Cache Functions
 uint32_t cache_read(int address);
-void cache_write(int address);
-void cache_fetch(int address);
+void cache_write(int address, uint8_t data);
+uint32_t cache_fetch(int address);
 void cache_invalidate(int address);
 void cache_clear(void);
 void cache_print(void);
