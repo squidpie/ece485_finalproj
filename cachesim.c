@@ -39,7 +39,7 @@ int main()
 	    switch (t.traceType) {
 				case READ:
                     data = cache_read(t.address);
-				    printf("L1 Data Read: %X\n", data);
+				    printf("L1 Data Read: %d\n", data);
                     break;
                 case WRITE:
                     printf("Write!\n");
