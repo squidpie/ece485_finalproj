@@ -34,12 +34,22 @@ int main()
    open_trace("traces/test1.trace");
 
     while(!next_trace(&t))
-        printf("Action: %d Addr: %x\n", t.traceType, t.address);
-	     switch (t.traceType) {
-				case 0: data = cache_read(t.address);
-						  printf("L1 Data Read: %X", data);
+    {
+        printf("Action: %d Addr: %x----------------\n", t.traceType, t.address);
+	    switch (t.traceType) {
+				case READ:
+                    data = cache_read(t.address);
+				    printf("L1 Data Read: %X\n", data);
+                    break;
+                case WRITE:
+                    printf("Write!\n");
+                    break;
+                default:    
+                    printf("Invald case!\n");
+                    break;
 			}
 
+    }
     close_trace();
 }
 
