@@ -12,6 +12,6 @@
 #define L2_HIT_RATE	0.8
 
 
-uint32_t _L2_service(uint32_t, uint8_t *, CacheStats *, int);
+void _L2_service(uint32_t, uint8_t *, CacheStats *, int);
 
 #endif // __L2_H__

@@ -8,8 +8,11 @@
 #define __CACHE_H__
 
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "cachestats.h"
+#include "L2.h"
 
 //Constants
 #define ICACHE_NUMSETS 16384
@@ -81,7 +84,7 @@ void cache_d_init(CacheStats *statsAddr);
 
 
 // Cache Functions
-uint32_t cache_read(int address);
+uint8_t cache_read(int address);
 void cache_write(int address, uint8_t data);
 uint32_t cache_fetch(int address);
 void cache_invalidate(int address);

@@ -25,8 +25,8 @@ int main()
 	//init L2 cache stats
 	CacheStats L2stats;
 	
-	cache_i_init(&L1I);
-	cache_d_init(&L1D);
+	cache_i_init(&L1Istats);
+	cache_d_init(&L1Dstats);
 	L2_init(&L2stats);
 
     open_trace("traces/test1.trace");
