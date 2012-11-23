@@ -46,31 +46,28 @@ void cache_d_init(CacheStats * statsAddr)
  TODO: Written without Psuedocode, 
 	   this should be remedied and then this algorithim verified
 */
-uint32_t cache_read(int address){
-	uint16_t readTag = address & GET_TAG_FROM_ADDR >> TAG_OFFSET;
-	int index = (address &  GET_INDEX_FROM_ADDR) >> INDEX_OFFSET;
-	uint32_t offset_mask = 0xFF << ((address & GET_OFFSET_FROM_ADDR) * 8);
+uint8_t cache_read(int address){
+	uint16_t readTag = (address & TAG) >> TAG_OFFSET;
+	uint16_t index = (address &  INDEX) >> INDEX_OFFSET;
+	uint8_t offset = address & OFFSET;
+	uint8_t data;
+
 	int hit = 0;
-	victim = -1;
+	int victim;
 	
 	L1D.stats->cache_read++;
 	
 	//Search set at index for read tag
-	for (i = 0; i < 4; i++){
-		if (readTag == (L1D.sets[index].line_tags[i] & D_TAG)) {
+	for (i = 0; i < DCACHE_ASSOC; i++){
+		if (readTag == (L1D.sets[index].line[i].tag)) {
 		
-			// check for invalid MESI state, evict this line if invalid and break to read from L2
-			if (!(L1D.sets[index].line_tags[i] & D_MESI)) {
-				victim = i;
-				break;
-			}
 			// tag is valid, process read request
 			hit = 1;
 			L1D.stats->cache_read_hits++;
-			update_LRU(L1D.sets[index], i);
+			//update_LRU(L1D.sets[index], i);
 			
 			//Return data
-			data = L1D.sets[index].data[i];
+			data = L1D.sets[index].line[i].data[offset];
 		}
 	}
 
@@ -79,14 +76,14 @@ uint32_t cache_read(int address){
 		L1D.stats->cache_read_misses++;
 		
 		// get victim if miss wasn't from invalid state
-		if (victim < 0) victim = evict_LRU(L1D.sets[index]);
+		victim = 0 //evict_LRU(L1D.sets[index]);
 		
 		// update victim line tag and set MESI to exclusive, get data from L2
-		L1D.sets[index].line_tags[victim] = (readTag + 0x8000);
-		L1D.sets[index].data[victim] = L2_read(address);
+		L1D.sets[index].line[victim].tag = readTag;
+		L2_read(address, &L1D.sets[index].line[victim].data);
 		
 		// Return data
-		data = L1D.sets[index].data[victim];
+		data = L1D.sets[index].line[victim].data[offset];
 	}
 	
 	return data;
