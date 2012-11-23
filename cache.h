@@ -17,8 +17,6 @@
 
 // Constants for instruction cache masking
 #define I_LRU 1 << 0    //mask for lru bit
-#define I_VALID0 1 << 1 //mask for valid bit 0
-#define I_VALID1 1 << 2 //mask for valid bit 1
 
 // Constants for data cache masking
 #define D_LRU01 1 << 0  //mask for LRU bit 01
@@ -28,25 +26,30 @@
 #define D_LRU13 1 << 4  //mask for LRU bit 13
 #define D_LRU23 1 << 5  //mask for LRU bit 23
 
-#define D_TAG 0x0FFF      //mask for tag bits
-#define D_MESI 0xC000     //mask for mesi bits
-#define D_MESI0 1 << 14  //mask for mesi bit 0
-#define D_MESI1 1 << 15  //mask for mesi bit 1
+// Mask constants for finding Tag and Index values 
+#define TAG 0xFFF00000      //mask for tag bits
+#define INDEX 0xFFFC0     //mask for cache index
+#define OFFSET 0x3F			// Mask for data index
+#define VALID 0x8000		// mask for valid from tag
+
+typedef struct {
+	uint16_t tag;		// Tag is lower 12 bits, Valid is MSB
+	uint8_t data[64]; // Byte addressable data 
+} line;
 
 typedef struct {
 
-    uint16_t line_tags[2];      //12 bits tag, high order 4 bits always 0
-    uint8_t set_info;           //valid and LRU bits 
+   line lines[2];					 // Line entries 
+	uint8_t set_info;           // LRU bits 
 
 } InstrCacheSet;
 
 typedef struct {
 
-    uint16_t line_tags[4];      //low order 12 bits for tag, 2 high order bits for mesi
+    line lines[4];      //low order 12 bits for tag, 2 high order bits for mesi
     uint8_t set_info;           //LRU bits
 
 } DataCacheSet;
-
 
 typedef struct {
 
