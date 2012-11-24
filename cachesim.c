@@ -11,9 +11,11 @@
 #include "cache.h"
 
 
-int main()
+int main(int argc, char ** argv)
 {
-    //init trace struct
+	char traceFile[1024];
+   argc > 1 ? strcpy(traceFile,argv[1]): strcpy(traceFile,"traces/default.trace");
+	//init trace struct
     Trace t;
     t.traceType = 0;
     t.address = 0;
@@ -31,7 +33,7 @@ int main()
 	cache_i_init(&L1Istats);
 	cache_d_init(&L1Dstats);
 	L2_init(&L2stats);
-   open_trace("traces/test1.trace");
+   open_trace(traceFile);
 
     while(!next_trace(&t))
     {
