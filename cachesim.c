@@ -35,7 +35,7 @@ int main()
 
     while(!next_trace(&t))
     {
-        printf("Action: %d Addr: %x----------------\n", t.traceType, t.address);
+        printf("Action: %d Addr: %x\n", t.traceType, t.address);
 	    switch (t.traceType) {
 				case READ:
                     data = cache_read(t.address);
@@ -46,11 +46,21 @@ int main()
 						  cache_write(t.address,data);
                     printf("Write Data: %d\n", data);
                     break;
+                case FETCH:
+                    printf("L1 Instruction Fetch\n");
+                    break;
+                case INVALIDATE:
+                    printf("Invalidate from L2\n");
+                    break;
+                case CLEAR:
+                    printf("Cache Cleared\n");
+                    break;
+                case PRINT:
+                    cache_print();
+                    break;
                 default:    
                     printf("Invald case!\n");
-                    break;
 			}
-
     }
     close_trace();
 }
