@@ -7,7 +7,7 @@ void _L2_service(uint32_t address, uint8_t * dataHead,  CacheStats * statsAddr, 
 	uint32_t mask = 0xF << 28;
 	uint32_t reversed = 0x0;
 	int shift = 28;
-	int i;
+	uint8_t i;
 
 
 	if (statsAddr != NULL) { 
@@ -43,8 +43,8 @@ void _L2_service(uint32_t address, uint8_t * dataHead,  CacheStats * statsAddr, 
 	}	
 	
 	if (dataHead != NULL) {
-		dataHead[0] = reversed;
-		for (i = 4; i < 64; i++) {
+		//dataHead[0] = reversed;
+		for (i = 0; i < 64; i++) {
 			dataHead[i] = i; 
 		}
 	}

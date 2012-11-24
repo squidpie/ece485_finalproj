@@ -15,7 +15,7 @@ void cache_i_init(CacheStats * statsAddr)
     for(i = 0; i < ICACHE_NUMSETS; i++)
     {
 		for (j = 0; j < ICACHE_ASSOC; j ++) {
-			L1I.sets[i].lines[j].tag = 0;
+			L1I.sets[i].lines[j].tag = ~0;
 			memset(L1I.sets[i].lines[j].data,0,64) ;
 		}
         L1I.sets[i].set_info = 0;        
@@ -31,7 +31,7 @@ void cache_d_init(CacheStats * statsAddr)
     for(i = 0; i < DCACHE_NUMSETS; i++)
     {
 		for (j = 0; j < DCACHE_ASSOC; j++) { 
-        	L1D.sets[i].lines[j].tag  = 0;
+        	L1D.sets[i].lines[j].tag  = ~0;
        	memset(L1D.sets[i].lines[j].data,0,64);
 		}
         L1D.sets[i].set_info = 0;        
@@ -47,8 +47,7 @@ uint8_t cache_read(int address){
 	uint16_t readTag = (address & TAG) >> TAG_SHIFT;
 	uint16_t index = (address &  INDEX) >> INDEX_SHIFT;
 	uint8_t offset = address & OFFSET;
-	uint8_t data;
-
+	uint8_t data = 0xA;
 	int hit = 0;
 	int victim;
 	int i = 0;
@@ -66,6 +65,7 @@ uint8_t cache_read(int address){
 			
 			//Return data
 			data = L1D.sets[index].lines[i].data[offset];
+			break;
 		}
 	}
 
