@@ -21,6 +21,8 @@
 #define ICACHE_ASSOC    2
 #define DCACHE_ASSOC    4
 
+#define LINE_SIZE 64
+
 // Cache Data Structure
 
 // Constants for instruction cache masking
@@ -45,7 +47,7 @@
 
 typedef struct {
 	uint16_t tag;		// Tag is lower 12 bits, Valid is MSB
-	uint8_t data[64];   // Byte addressable data 
+	uint8_t data[LINE_SIZE];   // Byte addressable data 
 } line;
 
 typedef struct {
@@ -90,6 +92,18 @@ void cache_clear(void);
 void cache_print(void);
 
 // Priate Methods
+// Print Methods
+static void print_datacache(void);
+static void print_instrcache(void);
+static void print_icacheset(uint16_t index, InstrCacheSet* set);
+static void print_dcacheset(uint16_t index, DataCacheSet* set);
+
+static void print_data(line *line);
+
+// Helper Methods
+static int line_valid(line *cacheline);
+static int data_set_any_valid(DataCacheSet* set);
+static int instr_set_any_valid(InstrCacheSet* set);
 
 // Private Variables
 static L1InstrCache L1I;
