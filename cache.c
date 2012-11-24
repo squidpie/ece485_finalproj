@@ -159,32 +159,41 @@ static void print_datacache(void)
 
 static void print_instrcache(void)
 {
-    int i = 0;
-    InstrCacheSet currentSet;
 
-    printf("Index\t\tLRU");
-    printf(" | \033[1mSet 1\033[0m\tTag\tData");
-    printf(" | Set 2\tTag\tData");
+    int i = 0;
+    InstrCacheSet *currentSet;
 
     for(i = 0; i < ICACHE_NUMSETS; i++)
     {
-        currentSet = L1I.sets[i];
-        //If any line in the set is valid, print the set
-        if(currentSet.lines[0].tag & VALID
-            || currentSet.lines[1].tag & VALID)
+        currentSet = &L1I.sets[i];
+        
+        //If any lines are valid, print set
+        if(instr_set_any_valid(currentSet))
         {
-            print_icacheset(i, &currentSet);
-        }
+            print_icacheset(i, currentSet);
+        } 
+
     }
 }
 
 static void print_icacheset(uint16_t index, InstrCacheSet * set)
 {
-    printf("0x%X\t\t%d\t\t", index, set->set_info);
-    printf("0x%X\t0x%X\t",
-        set->lines[0].tag, *set->lines[0].data);
-    printf("0x%X\t0x%X\t",
-        set->lines[1].tag, *set->lines[1].data);
+
+    int i = 0;
+
+    printf("-------------------------------------\n");
+    printf("Index: %X\n LRU: %d\n", index, set->set_info);
+
+    for(i = 0; i < ICACHE_ASSOC; i++)
+    {
+        if(line_valid(&set->lines[i]))
+        {
+            printf("\tLine: %d Tag: %X\n",
+                i,
+                set->lines[i].tag);
+            print_data(&set->lines[i]);
+        }
+    }
 }
 
 static void print_dcacheset(uint16_t index, DataCacheSet * set)
@@ -215,7 +224,7 @@ static void print_data(line *line)
     {
         printf("%X ", line->data[i]);
     }
-    printf("\n\t\tData[32-64]: ");
+    printf("\n\t\tData[32-63]: ");
     for(i = LINE_SIZE / 2; i < LINE_SIZE; i++)
     {
         printf("%X ", line->data[i]);
