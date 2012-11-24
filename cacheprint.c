@@ -19,7 +19,7 @@ void cache_print(void)
 static void print_datacache(void)
 {
     int i = 0;
-    DataCacheSet currentSet;
+    DataCacheSet *currentSet;
 
     printf("Index\t\tLRU");
     printf(" | \033[1mSet 1\033[0m\tTag\tData");
@@ -29,13 +29,16 @@ static void print_datacache(void)
 
     for(i = 0; i < DCACHE_NUMSETS; i++)
     {
-        currentSet = L1D.sets[i];
+        currentSet = &L1D.sets[i];
         
+        printf("Tag: %X\n", L1D.sets[i].lines[0].tag);
+        printf("Tag: %X\n", currentSet->lines[1].tag);
+        break;
         //If any lines are valid, print set
-        if(currentSet.lines[0].tag & VALID
-            || currentSet.lines[1].tag & VALID
-            || currentSet.lines[2].tag & VALID
-            || currentSet.lines[3].tag & VALID)
+        if(!(currentSet->lines[0].tag & VALID)
+            || !(currentSet->lines[1].tag & VALID)
+            || !(currentSet->lines[2].tag & VALID)
+            || !(currentSet->lines[3].tag & VALID))
         {
             print_dcacheset(i, &currentSet);
         } 
@@ -67,20 +70,20 @@ static void print_icacheset(uint16_t index, InstrCacheSet * set)
 {
     printf("0x%X\t\t%d\t\t", index, set->set_info);
     printf("0x%X\t0x%X\t",
-        set->lines[0].tag, set->lines[0].data);
+        set->lines[0].tag, *set->lines[0].data);
     printf("0x%X\t0x%X\t",
-        set->lines[1].tag, set->lines[1].data);
+        set->lines[1].tag, *set->lines[1].data);
 }
 
 static void print_dcacheset(uint16_t index, DataCacheSet * set)
 {
     printf("0x%X\t\t%d\t\t", index, set->set_info);
     printf("0x%X\t0x%X\t", 
-        set->lines[0].tag, set->lines[0].data);
+        set->lines[0].tag, *set->lines[0].data);
     printf("0x%X\t0x%X\t", 
-        set->lines[1].tag, set->lines[1].data);
+        set->lines[1].tag, *set->lines[1].data);
     printf("0x%X\t0x%X\t", 
-        set->lines[2].tag, set->lines[2].data);
+        set->lines[2].tag, *set->lines[2].data);
     printf("0x%X\t0x%X\t\n", 
-        set->lines[3].tag, set->lines[3].data);
+        set->lines[3].tag, *set->lines[3].data);
 }
