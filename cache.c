@@ -11,12 +11,13 @@ void cache_i_init(CacheStats * statsAddr)
 {
     int i = 0;
 	int j = 0;
+	
 
     for(i = 0; i < ICACHE_NUMSETS; i++)
     {
 		for (j = 0; j < ICACHE_ASSOC; j ++) {
-			L1I.sets[i].lines[j].tag = ~0;
-			memset(L1I.sets[i].lines[j].data,0,64) ;
+			L1I.sets[i].lines[j].tag = 0xFFFF;
+			memset(L1I.sets[i].lines[j].data,0xAA,64) ;
 		}
         L1I.sets[i].set_info = 0;        
     }
@@ -31,8 +32,8 @@ void cache_d_init(CacheStats * statsAddr)
     for(i = 0; i < DCACHE_NUMSETS; i++)
     {
 		for (j = 0; j < DCACHE_ASSOC; j++) { 
-        	L1D.sets[i].lines[j].tag  = ~0;
-       	memset(L1D.sets[i].lines[j].data,0,64);
+       	L1D.sets[i].lines[j].tag  = 0xFFFF;
+       	memset(L1D.sets[i].lines[j].data,0xAA,64);
 		}
         L1D.sets[i].set_info = 0;        
     }
