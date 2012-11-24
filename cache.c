@@ -48,7 +48,6 @@ uint8_t cache_read(int address){
 	uint16_t index = (address &  INDEX) >> INDEX_SHIFT;
 	uint8_t offset = address & OFFSET;
 	uint8_t data = 0xA;
-	printf("OFFSET: %d",offset);
 	int hit = 0;
 	int victim;
 	int i = 0;
@@ -66,7 +65,6 @@ uint8_t cache_read(int address){
 			
 			//Return data
 			data = L1D.sets[index].lines[i].data[offset];
-			printf("Data hit: %x\n", data, readTag, L1D.sets[index].lines[i].tag);
 			break;
 		}
 	}
@@ -84,7 +82,6 @@ uint8_t cache_read(int address){
 		
 		// Return data
 		data = L1D.sets[index].lines[victim].data[offset];
-		printf("Data Miss: %x\n", data);
 	}
 	
 	return data;
