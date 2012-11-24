@@ -42,7 +42,9 @@ int main()
 				    printf("L1 Data Read: %d\n", data);
                     break;
                 case WRITE:
-                    printf("Write!\n");
+						  data = (t.address & 0xFF000000) >> 28;
+						  cache_write(t.address,data);
+                    printf("Write Data: %d\n", data);
                     break;
                 default:    
                     printf("Invald case!\n");

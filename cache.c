@@ -41,6 +41,46 @@ void cache_d_init(CacheStats * statsAddr)
 }
 
 
+void cache_write(int address, uint8_t data){
+	uint16_t readTag = (address & TAG) >> TAG_SHIFT;
+	uint16_t index = (address &  INDEX) >> INDEX_SHIFT;
+	uint8_t offset = address & OFFSET;
+	int victim;
+	int hit = 0;
+	int i = 0;
+
+	L1D.stats->cache_writes++;
+	
+	//Search set at index for read tag
+	for (i = 0; i < DCACHE_ASSOC; i++){
+		if (readTag == (L1D.sets[index].lines[i].tag)) {
+		
+			// tag is valid, process read request
+			hit = 1;
+			L1D.stats->cache_write_hits++;
+			//update_LRU(L1D.sets[index], i);
+			
+			//Return data
+			L1D.sets[index].lines[i].data[offset] = data;
+			break;
+		}
+	}
+
+	if (!hit) {
+		L1D.stats->cache_write_misses++;
+		
+		// get victim if miss wasn't from invalid state
+		victim = 0; //evict_LRU(L1D.sets[index]);
+		
+		// update victim line tag and set MESI to exclusive, get data from L2
+		L1D.sets[index].lines[victim].tag = readTag;
+		L2_read(address, &L1D.sets[index].lines[victim].data);
+		
+		// Return data
+		L1D.sets[index].lines[victim].data[offset] = data;
+	}
+	L2_write(address,data);
+}
 /* takes input of address and outputs data
 */
 uint8_t cache_read(int address){
