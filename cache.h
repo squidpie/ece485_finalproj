@@ -40,7 +40,7 @@
 #define OFFSET  0x3F			// Mask for data index
 #define VALID   0x8000		    // mask for valid from tag
 
-#define TAG_SHIFT   24
+#define TAG_SHIFT   20
 #define INDEX_SHIFT 6
 
 typedef struct {
