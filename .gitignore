@@ -1,0 +1,11 @@
+#obj files
+*.o
+
+#vim swap files
+*.swp
+*.swn
+*.swo
+*.swm
+
+#vim undo files
+*.un~
