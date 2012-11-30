@@ -9,6 +9,8 @@
 #include "L2.h"
 #include "cachestats.h"
 #include "cache.h"
+#include "debug.h"
+
 
 
 int main(int argc, char ** argv)
@@ -22,6 +24,9 @@ int main(int argc, char ** argv)
 
 	uint8_t data;	
 
+    //Init debug mode
+    DEBUG = 1;
+
 	// Instruction Cache Stats
 	CacheStats L1Istats;
 	
@@ -33,35 +38,40 @@ int main(int argc, char ** argv)
 	cache_i_init(&L1Istats);
 	cache_d_init(&L1Dstats);
 	L2_init(&L2stats);
-   open_trace(traceFile);
+    open_trace(traceFile);
 
+
+    debug_printf("Reading trace file: %s\n", traceFile);
+    
     while(!next_trace(&t))
     {
-        printf("Action: %d Addr: %x\n", t.traceType, t.address);
+        #ifdef DEBUG
+        debug_printf("Action: %d Addr: %x\n", t.traceType, t.address);
+        #endif
 	    switch (t.traceType) {
 				case READ:
                     data = cache_read(t.address);
-				    printf("L1 Data Read: %d\n", data);
+				    debug_printf("L1 Data Read: %d\n", data);
                     break;
                 case WRITE:
-						  data = (t.address & 0xFF000000) >> 28;
-						  cache_write(t.address,data);
-                    printf("Write Data: %d\n", data);
+					data = (t.address & 0xFF000000) >> 28;
+				    cache_write(t.address,data);
+                    debug_printf("Write Data: %d\n", data);
                     break;
                 case FETCH:
-                    printf("L1 Instruction Fetch\n");
+                    debug_printf("L1 Instruction Fetch\n");
                     break;
                 case INVALIDATE:
-                    printf("Invalidate from L2\n");
+                    debug_printf("Invalidate from L2\n");
                     break;
                 case CLEAR:
-                    printf("Cache Cleared\n");
+                    debug_printf("Cache Cleared\n");
                     break;
                 case PRINT:
                     cache_print();
                     break;
                 default:    
-                    printf("Invald case!\n");
+                    debug_printf("Invald case!\n");
 			}
     }
     close_trace();

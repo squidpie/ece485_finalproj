@@ -132,7 +132,9 @@ uint8_t cache_read(int address){
 
 void cache_print(void)
 {
+    printf("=======================\n");
     printf("L1 Data Cache Contents: \n");        
+    printf("=======================\n");
     print_datacache();
     //printf("L1 Instruction Cache Contents: \n");        
     //print_instrcache();
@@ -253,7 +255,6 @@ static int data_set_any_valid(DataCacheSet* set)
 }
 static int instr_set_any_valid(InstrCacheSet* set)
 {
-
     int i = 0;
     int valid = 0;
 
