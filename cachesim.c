@@ -16,7 +16,7 @@
 int main(int argc, char ** argv)
 {
 	char traceFile[1024];
-   argc > 1 ? strcpy(traceFile,argv[1]): strcpy(traceFile,"traces/default.trace");
+    argc > 1 ? strcpy(traceFile,argv[1]): strcpy(traceFile,"traces/default.trace");
 	//init trace struct
     Trace t;
     t.traceType = 0;
@@ -45,24 +45,23 @@ int main(int argc, char ** argv)
     
     while(!next_trace(&t))
     {
-        #ifdef DEBUG
-        debug_printf("Action: %d Addr: %x\n", t.traceType, t.address);
-        #endif
+        debug_printf("Action: %d Addr: %X\n", t.traceType, t.address);
 	    switch (t.traceType) {
 				case READ:
                     data = cache_read(t.address);
-				    debug_printf("L1 Data Read: %d\n", data);
+				    debug_printf("L1 Data Read. Address: 0x%X Data: %d\n", t.address, data);
                     break;
                 case WRITE:
 					data = (t.address & 0xFF000000) >> 28;
 				    cache_write(t.address,data);
-                    debug_printf("Write Data: %d\n", data);
+                    debug_printf("L1 Data Write. Address: 0x%X Data: %d\n", t.address, data);
                     break;
                 case FETCH:
-                    debug_printf("L1 Instruction Fetch\n");
+                    data = cache_fetch(t.address);
+                    debug_printf("L1 Instruction Fetch. Address: 0x%X Data: %d\n", t.address, data);
                     break;
                 case INVALIDATE:
-                    debug_printf("Invalidate from L2\n");
+                    debug_printf("Invalidate from L2. Address: 0x%X\n", t.address);
                     break;
                 case CLEAR:
                     debug_printf("Cache Cleared\n");
@@ -75,5 +74,8 @@ int main(int argc, char ** argv)
 			}
     }
     close_trace();
+
+    //Print stats
+
 }
 

@@ -6,6 +6,9 @@
 
 #include "cache.h"
 
+//TODO: remove this, it's for faking multiple lines without working LRU
+int victimline = 0;
+
 //Cache Initialization
 void cache_i_init(CacheStats * statsAddr)
 {
@@ -19,7 +22,7 @@ void cache_i_init(CacheStats * statsAddr)
 			L1I.sets[i].lines[j].tag = 0xFFFF;
 			memset(L1I.sets[i].lines[j].data,0xAA,64) ;
 		}
-        L1I.sets[i].set_info = 0;        
+        L1I.sets[i].set_info = 0;
     }
 	L1I.stats = statsAddr;
 }
@@ -50,7 +53,7 @@ void cache_write(int address, uint8_t data){
 	int hit = 0;
 	int i = 0;
 
-    printf("Cache.c L1D: %X\n", L1D);
+    debug_printf("Cache.c L1D: %X\n", L1D);
 	L1D.stats->cache_writes++;
 	
 	//Search set at index for read tag
@@ -62,7 +65,7 @@ void cache_write(int address, uint8_t data){
 			L1D.stats->cache_write_hits++;
 			//update_LRU(L1D.sets[index], i);
 			
-			//Return data
+			//Update stored data
 			L1D.sets[index].lines[i].data[offset] = data;
 			break;
 		}
@@ -72,15 +75,17 @@ void cache_write(int address, uint8_t data){
 		L1D.stats->cache_write_misses++;
 		
 		// get victim if miss wasn't from invalid state
-		victim = 0; //evict_LRU(L1D.sets[index]);
+		victim = ++victimline % 4; //victim = evict_LRU(L1D.sets[index]);
 		
 		// update victim line tag and set MESI to exclusive, get data from L2
 		L1D.sets[index].lines[victim].tag = readTag;
 		L2_read(address, &L1D.sets[index].lines[victim].data);
 		
-		// Return data
+        // Update data at offset
 		L1D.sets[index].lines[victim].data[offset] = data;
 	}
+
+    //Write-through to L2
 	L2_write(address,data);
 }
 /* takes input of address and outputs data
@@ -103,7 +108,7 @@ uint8_t cache_read(int address){
 			// tag is valid, process read request
 			hit = 1;
 			L1D.stats->cache_read_hits++;
-			//update_LRU(L1D.sets[index], i);
+			//update_LRU_D(L1D.sets[index], i);
 			
 			//Return data
 			data = L1D.sets[index].lines[i].data[offset];
@@ -116,7 +121,7 @@ uint8_t cache_read(int address){
 		L1D.stats->cache_read_misses++;
 		
 		// get victim if miss wasn't from invalid state
-		victim = 0; //evict_LRU(L1D.sets[index]);
+		victim = ++victimline % 4; //evict_LRU_D(L1D.sets[index]);
 		
 		// update victim line tag and set MESI to exclusive, get data from L2
 		L1D.sets[index].lines[victim].tag = readTag;
@@ -129,6 +134,49 @@ uint8_t cache_read(int address){
 	return data;
 }
 
+uint8_t cache_fetch(int address){
+	uint16_t readTag = (address & TAG) >> TAG_SHIFT;
+	uint16_t index = (address &  INDEX) >> INDEX_SHIFT;
+	uint8_t offset = address & OFFSET;
+	uint8_t data = 0xA;
+	int hit = 0;
+	int victim;
+	int i = 0;
+
+	L1D.stats->cache_reads++;
+	
+	//Search set at index for read tag
+	for (i = 0; i < ICACHE_ASSOC; i++){
+		if (readTag == (L1I.sets[index].lines[i].tag)) {
+		
+			// tag is valid, process read request
+			hit = 1;
+			L1I.stats->cache_read_hits++;
+			//update_LRU_I(L1I.sets[index], i);
+			
+			//Return data
+			data = L1I.sets[index].lines[i].data[offset];
+			break;
+		}
+	}
+
+	// If cache miss, evict and write to cache, get data from L2
+	if (!hit) {
+		L1I.stats->cache_read_misses++;
+		
+		// get victim if miss wasn't from invalid state
+		victim = 0; //evict_LRU_I(L1I.sets[index]);
+		
+		// update victim line tag and set MESI to exclusive, get data from L2
+		L1I.sets[index].lines[victim].tag = readTag;
+		L2_read(address, &L1D.sets[index].lines[victim].data);
+		
+		// Return data
+		data = L1I.sets[index].lines[victim].data[offset];
+	}
+	
+	return data;
+}
 
 void cache_print(void)
 {
@@ -136,8 +184,10 @@ void cache_print(void)
     printf("L1 Data Cache Contents: \n");        
     printf("=======================\n");
     print_datacache();
-    //printf("L1 Instruction Cache Contents: \n");        
-    //print_instrcache();
+    printf("=======================\n");
+    printf("L1 Instruction Cache Contents: \n");        
+    printf("=======================\n");
+    print_instrcache();
 }
 
 //Static cache print functions
