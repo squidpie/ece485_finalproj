@@ -11,13 +11,13 @@ void cachestat_print(CacheStats *s)
     printf("=====================================\n");
     printf("Cache Statistics:\n");
 
-    printf("Total Reads: %d\n", s->cache_reads);
-    printf("Read Hits: %d\n", s->cache_read_hits);
-    printf("Read Misses: %d\n", s->cache_read_misses);
+    printf("Total Reads: %lu\n", s->cache_reads);
+    printf("Read Hits: %lu\n", s->cache_read_hits);
+    printf("Read Misses: %lu\n", s->cache_read_misses);
 
-    printf("Total Writes: %d\n", s->cache_writes);
-    printf("Write Hits: %d\n", s->cache_write_hits);
-    printf("Write Misses: %d\n", s->cache_write_misses);
+    printf("Total Writes: %lu\n", s->cache_writes);
+    printf("Write Hits: %lu\n", s->cache_write_hits);
+    printf("Write Misses: %lu\n", s->cache_write_misses);
     printf("=====================================\n");
 }
 

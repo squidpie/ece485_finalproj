@@ -143,7 +143,7 @@ uint8_t cache_fetch(int address){
 	int victim;
 	int i = 0;
 
-	L1D.stats->cache_reads++;
+	L1I.stats->cache_reads++;
 	
 	//Search set at index for read tag
 	for (i = 0; i < ICACHE_ASSOC; i++){
