@@ -35,6 +35,14 @@ int main(int argc, char ** argv)
 	
 	//init L2 cache stats
 	CacheStats L2stats;
+
+
+    //init stats structs
+    cachestat_init(&L1Istats);
+    cachestat_init(&L1Dstats);
+    cachestat_init(&L2stats);
+
+
 	cache_i_init(&L1Istats);
 	cache_d_init(&L1Dstats);
 	L2_init(&L2stats);
@@ -76,6 +84,10 @@ int main(int argc, char ** argv)
     close_trace();
 
     //Print stats
+    printf("L1 Instruction Cache:\n");
+    cachestat_print(&L1Istats);
+    printf("L1 Data Cache:\n");
+    cachestat_print(&L1Dstats);
 
 }
 

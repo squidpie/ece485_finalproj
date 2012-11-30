@@ -23,6 +23,7 @@ typedef struct {
 
 } CacheStats;
 
-void cachestat_print(CacheStats *stats);
+void cachestat_print(CacheStats *s);
+void cacheset_init(CacheStats *s);
 
 #endif //__CACHESTATS_H__
