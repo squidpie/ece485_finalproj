@@ -16,7 +16,28 @@
 int main(int argc, char ** argv)
 {
 	char traceFile[1024];
-    argc > 1 ? strcpy(traceFile,argv[1]): strcpy(traceFile,"traces/default.trace");
+	int i;
+	// set traceFile to null, parse cla for verbose and custom trace file
+	strcpy(traceFile, "\0");
+	for(i = 1; i < argc; i++)
+	{
+		if (!strcmp(argv[i],"-v"))
+		{
+			// Enable debug print messages
+			DEBUG = 1;
+		}
+		else if (!strcmp(argv[i],"-t")) 
+		{
+			// assign trace file
+			strcpy(traceFile,argv[i+1]);
+		}	
+	}
+	// if no trace file was assigned, assign default trace
+	if (!strcmp(traceFile,"\0"))
+	{
+		strcpy(traceFile, "traces/default.trace");
+	}
+
 	//init trace struct
     Trace t;
     t.traceType = 0;
@@ -26,8 +47,9 @@ int main(int argc, char ** argv)
 
     uint64_t traceCounter = 0;
 
+	initDataLRU();
     //Init debug mode
-    DEBUG = 1;
+    //DEBUG = 1;
 
 	// Instruction Cache Stats
 	CacheStats L1Istats;

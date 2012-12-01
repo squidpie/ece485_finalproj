@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g
-OBJECTS = cachesim.o traceread.o cache.o L2.o debug.o cachestats.o
+OBJECTS = cachesim.o traceread.o cache.o L2.o debug.o cachestats.o lru.o
 
 default: cachesim
 
@@ -24,6 +24,9 @@ debug.o: debug.c debug.h
 
 cachestats.o: cachestats.c cachestats.h
 	$(CC) -c cachestats.c
+
+lru.o: lru.c lru.h
+	$(CC) -c lru.c
 
 L2_test.o: L2_test.c 
 	$(CC) -c L2_test.c

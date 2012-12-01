@@ -63,7 +63,7 @@ void cache_write(int address, uint8_t data){
 			// tag is valid, process read request
 			hit = 1;
 			L1D.stats->cache_write_hits++;
-			//update_LRU(L1D.sets[index], i);
+			accessDataLRU(i, &L1D.sets[index]);
 			
 			//Update stored data
 			L1D.sets[index].lines[i].data[offset] = data;
@@ -75,7 +75,7 @@ void cache_write(int address, uint8_t data){
 		L1D.stats->cache_write_misses++;
 		
 		// get victim if miss wasn't from invalid state
-		victim = ++victimline % 4; //victim = evict_LRU(L1D.sets[index]);
+		victim = getDataVictim(&L1D.sets[index]);
 		
 		// update victim line tag and set MESI to exclusive, get data from L2
 		L1D.sets[index].lines[victim].tag = readTag;
@@ -108,7 +108,7 @@ uint8_t cache_read(int address){
 			// tag is valid, process read request
 			hit = 1;
 			L1D.stats->cache_read_hits++;
-			//update_LRU_D(L1D.sets[index], i);
+			accessDataLRU(i,&L1D.sets[index]);
 			
 			//Return data
 			data = L1D.sets[index].lines[i].data[offset];
@@ -119,9 +119,10 @@ uint8_t cache_read(int address){
 	// If cache miss, evict and write to cache, get data from L2
 	if (!hit) {
 		L1D.stats->cache_read_misses++;
+		debug_printf("set_info_addr: %x\n",&L1D.sets[index].set_info);
 		
 		// get victim if miss wasn't from invalid state
-		victim = ++victimline % 4; //evict_LRU_D(L1D.sets[index]);
+		victim = getDataVictim(&L1D.sets[index]);
 		
 		// update victim line tag and set MESI to exclusive, get data from L2
 		L1D.sets[index].lines[victim].tag = readTag;
@@ -152,7 +153,7 @@ uint8_t cache_fetch(int address){
 			// tag is valid, process read request
 			hit = 1;
 			L1I.stats->cache_read_hits++;
-			//update_LRU_I(L1I.sets[index], i);
+			accessInstLRU(i, &L1I.sets[index]);
 			
 			//Return data
 			data = L1I.sets[index].lines[i].data[offset];
@@ -165,7 +166,7 @@ uint8_t cache_fetch(int address){
 		L1I.stats->cache_read_misses++;
 		
 		// get victim if miss wasn't from invalid state
-		victim = 0; //evict_LRU_I(L1I.sets[index]);
+		victim = getInstVictim(&L1I.sets[index]);
 		
 		// update victim line tag and set MESI to exclusive, get data from L2
 		L1I.sets[index].lines[victim].tag = readTag;

@@ -1,17 +1,18 @@
 #ifndef _LRU_H
 #define _LRU_H
 
-#define DATA_ACC_1	0x
+#include "cache.h"
+#include "debug.h"
 
-uint_8 dataMask[4][2];
+uint8_t dataMask[4][2];
 
 void initDataLRU( void );
 
-void accessDataLRU( int );
-int getDataVictim( void );
+void accessDataLRU( int, DataCacheSet * );
+int getDataVictim( DataCacheSet * );
 
-void accessInstLRU( int ):
-int getInstVictim( void);
+void accessInstLRU( int, InstrCacheSet * );
+int getInstVictim( InstrCacheSet *);
 
 
-#endif
+#endif //_LRU_H
