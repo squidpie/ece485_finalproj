@@ -86,7 +86,7 @@ void cache_d_init(CacheStats *statsAddr);
 // Cache Functions
 uint8_t cache_read(int address);
 void cache_write(int address, uint8_t data);
-uint8_t cache_fetch(int address);
+uint32_t cache_fetch(int address);
 void cache_invalidate(int address);
 void cache_clear(void);
 void cache_print(void);
