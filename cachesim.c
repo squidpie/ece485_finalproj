@@ -24,6 +24,8 @@ int main(int argc, char ** argv)
 
 	uint8_t data;	
 
+    uint64_t traceCounter = 0;
+
     //Init debug mode
     DEBUG = 1;
 
@@ -53,26 +55,26 @@ int main(int argc, char ** argv)
     
     while(!next_trace(&t))
     {
-        debug_printf("Action: %d Addr: %X\n", t.traceType, t.address);
 	    switch (t.traceType) {
 				case READ:
                     data = cache_read(t.address);
-				    debug_printf("L1 Data Read. Address: 0x%X Data: %d\n", t.address, data);
+				    debug_printf("t%lu\t: L1 Data Read. Address: 0x%X Data: %d\n", traceCounter, t.address, data);
                     break;
                 case WRITE:
 					data = (t.address & 0xFF000000) >> 28;
 				    cache_write(t.address,data);
-                    debug_printf("L1 Data Write. Address: 0x%X Data: %d\n", t.address, data);
+                    debug_printf("t%lu\t: L1 Data Write. Address: 0x%X Data: %d\n", traceCounter, t.address, data);
                     break;
                 case FETCH:
                     data = cache_fetch(t.address);
-                    debug_printf("L1 Instruction Fetch. Address: 0x%X Data: %d\n", t.address, data);
+                    debug_printf("t%lu\t: L1 Instruction Fetch. Address: 0x%X Data: %d\n", traceCounter, t.address, data);
                     break;
                 case INVALIDATE:
-                    debug_printf("Invalidate from L2. Address: 0x%X\n", t.address);
+                    debug_printf("t%lu\t: Invalidate from L2. Address: 0x%X\n", traceCounter, t.address);
+                    cache_invalidate(t.address);
                     break;
                 case CLEAR:
-                    debug_printf("Cache Cleared\n");
+                    debug_printf("t%lu\t: Cache Cleared\n", traceCounter);
                     break;
                 case PRINT:
                     cache_print();
@@ -80,6 +82,7 @@ int main(int argc, char ** argv)
                 default:    
                     debug_printf("Invald case!\n");
 			}
+        traceCounter++;
     }
     close_trace();
 
