@@ -8,6 +8,8 @@
 #define __CACHESTATS_H__
 
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 typedef struct {
 
@@ -21,5 +23,8 @@ typedef struct {
     uint64_t cache_write_misses;
 
 } CacheStats;
+
+void cachestat_print(CacheStats *s);
+void cachestat_init(CacheStats *s);
 
 #endif //__CACHESTATS_H__
