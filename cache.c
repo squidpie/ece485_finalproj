@@ -189,6 +189,8 @@ void cache_invalidate(int address)
 		if (readTag == (L1D.sets[index].lines[i].tag)) {
             //tag found, invalidate line
             L1D.sets[index].lines[i].tag |= VALID;
+
+            L1D.stats->cache_invalidates++;
 		
 			break;
 		}
