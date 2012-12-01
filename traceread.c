@@ -31,7 +31,7 @@ int next_trace(Trace* t)
     t->address = 0; 
     
     //Parse line into Trace
-    sscanf(tracebuffer, "%d %x", (int*)&t->traceType, &t->address);
+    sscanf(tracebuffer, "%d%*[ \t]%x", (int*)&t->traceType, &t->address);
 
     return 0;
 }
