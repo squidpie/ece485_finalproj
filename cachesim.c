@@ -70,6 +70,7 @@ int main(int argc, char ** argv)
                     break;
                 case INVALIDATE:
                     debug_printf("Invalidate from L2. Address: 0x%X\n", t.address);
+                    cache_invalidate(t.address);
                     break;
                 case CLEAR:
                     debug_printf("Cache Cleared\n");

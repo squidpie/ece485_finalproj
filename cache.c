@@ -178,6 +178,23 @@ uint8_t cache_fetch(int address){
 	return data;
 }
 
+void cache_invalidate(int address)
+{
+	uint16_t readTag = (address & TAG) >> TAG_SHIFT;
+	uint16_t index = (address &  INDEX) >> INDEX_SHIFT;
+	int i = 0;
+
+	//Search set at index for read tag
+	for (i = 0; i < DCACHE_ASSOC; i++){
+		if (readTag == (L1D.sets[index].lines[i].tag)) {
+            //tag found, invalidate line
+            L1D.sets[index].lines[i].tag |= VALID;
+		
+			break;
+		}
+	}
+}
+
 void cache_print(void)
 {
     printf("=======================\n");
