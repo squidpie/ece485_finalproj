@@ -99,6 +99,7 @@ int main(int argc, char ** argv)
                     debug_printf("t%lu\t: Cache Cleared\n", traceCounter);
                     break;
                 case PRINT:
+                    debug_printf("t%lu\t: Printing Cache\n", traceCounter);
                     cache_print();
                     break;
                 default:    

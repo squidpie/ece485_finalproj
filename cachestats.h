@@ -21,6 +21,8 @@ typedef struct {
 
     uint64_t cache_write_hits;
     uint64_t cache_write_misses;
+    
+    uint64_t cache_invalidates;
 
 } CacheStats;
 
