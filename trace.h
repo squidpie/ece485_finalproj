@@ -13,7 +13,9 @@ enum TraceAction {
     FETCH = 2,
     INVALIDATE = 3,
     CLEAR = 8,
-    PRINT = 9
+    PRINT = 9,
+
+    INVALID
 };
 
 typedef struct {

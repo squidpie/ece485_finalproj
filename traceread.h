@@ -23,4 +23,9 @@ int read_next(Trace *t);
 
 static int parse_line(char *buffer, Trace *t);
 
+static const char *tok_delim = "\t \n\r";
+
+static char straction[256];
+static char straddr[256];
+
 #endif //__TRACEREAD_H__
