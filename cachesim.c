@@ -26,6 +26,14 @@ int main(int argc, char ** argv)
 			// Enable debug print messages
 			DEBUG = 1;
 		}
+        else if (!strcmp(argv[i], "-vv"))
+        {
+			DEBUG = 2;
+        }
+        else if (!strcmp(argv[i], "-vvv"))
+        {
+			DEBUG = 3;
+        }
 		else if (!strcmp(argv[i],"-t")) 
 		{
 			// assign trace file
@@ -103,7 +111,7 @@ int main(int argc, char ** argv)
                     cache_print();
                     break;
                 default:
-                    debug_printf("Invald case!\n");
+                    debug_printf("t%lu\t: Invald case!\n", traceCounter);
 			}
         traceCounter++;
     }

@@ -13,5 +13,8 @@
 int DEBUG;
 
 void debug_printf(const char *fmt, ...);
+void more_debug_printf(const char *fmt, ...);
+void even_more_debug_printf(const char *fmt, ...);
+
 
 #endif //__DEBUG_H__

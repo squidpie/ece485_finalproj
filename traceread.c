@@ -27,7 +27,7 @@ int next_trace(Trace* t)
     //Check if EOF reached
     if(feof(tracestream))
     {
-        printf("EOF\n");
+        more_debug_printf("EOF\n");
         return -1;
     }
 
@@ -45,21 +45,21 @@ int next_trace(Trace* t)
     if(temp)
         strcpy(straction, temp);
 
-    debug_printf("*** straction: %s\n", straction);
+    even_more_debug_printf("*** straction: %s\n", straction);
     if(!strlen(straction))
         return 0;
 
     temp = strtok(NULL, tok_delim);
     if(temp)
         strcpy(straddr, temp);
-    debug_printf("*** straddr: %s length: %d\n", straddr, strlen(straddr));
+    even_more_debug_printf("*** straddr: %s length: %d\n", straddr, strlen(straddr));
     
     if(strcmp("8", straction) 
         && strcmp("9", straction) 
         && !strlen(straddr))
         return 0;
 
-    debug_printf("Action: %s Addr: %s\n", straction, straddr);
+    even_more_debug_printf("Action: %s Addr: %s\n", straction, straddr);
     sscanf(straction, "%d", (int*)&t->traceType);
     sscanf(straddr, "%x", (int*)&t->address);
 
