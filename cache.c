@@ -53,7 +53,6 @@ void cache_write(int address, uint8_t data){
 	int hit = 0;
 	int i = 0;
 
-    debug_printf("Cache.c L1D: %X\n", L1D);
 	L1D.stats->cache_writes++;
 	
 	//Search set at index for read tag
@@ -119,7 +118,6 @@ uint8_t cache_read(int address){
 	// If cache miss, evict and write to cache, get data from L2
 	if (!hit) {
 		L1D.stats->cache_read_misses++;
-		debug_printf("set_info_addr: %x\n",&L1D.sets[index].set_info);
 		
 		// get victim if miss wasn't from invalid state
 		victim = getDataVictim(&L1D.sets[index]);

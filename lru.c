@@ -17,7 +17,7 @@ void initDataLRU( void ){
 void accessDataLRU( int way, DataCacheSet * set ) {
 		// apply set and clear mask to LRU state
 		set->set_info  = set->set_info & dataMask[way][0] | dataMask[way][1];
-		debug_printf("New Data LRU state: 0x%x\n",set->set_info);
+		more_debug_printf("New Data LRU state: 0x%x\n",set->set_info);
 
 }
 
@@ -40,7 +40,7 @@ int getDataVictim( DataCacheSet * set ) {
 	{
 		victim = 3; 
 	}
-	debug_printf("Evicted Data LRU way: %d\n", victim);
+	more_debug_printf("Evicted Data LRU way: %d\n", victim);
 	accessDataLRU(victim, set);
 	return victim;
 
@@ -48,12 +48,12 @@ int getDataVictim( DataCacheSet * set ) {
 
 void accessInstLRU( int way, InstrCacheSet * set ) {
 	set->set_info = (~way & 0x1);
-	debug_printf("New Instr LRU State: %d\n", set->set_info);
+	more_debug_printf("New Instr LRU State: %d\n", set->set_info);
 
 }
 
 int getInstVictim( InstrCacheSet * set ) {
-	debug_printf("Evicted Instr LRU way: %d\n", set->set_info);
+	more_debug_printf("Evicted Instr LRU way: %d\n", set->set_info);
 	int victim = set->set_info;
 	accessInstLRU(victim, set);
 	return victim;
