@@ -1,5 +1,4 @@
 ﻿#include "L2.h"
-#include <stdio.h>
 
 void _L2_service(uint32_t address, uint8_t * dataHead,  CacheStats * statsAddr, int RW) {
 	
@@ -26,26 +25,12 @@ void _L2_service(uint32_t address, uint8_t * dataHead,  CacheStats * statsAddr, 
 		else L2_stats->cache_write_misses++;
 	}
 	
-	if (RW) {
-		for(i = 4; i > 0;  i--) {
-			reversed += ((address & mask) >> shift);
-			shift -= 8;
-			mask = mask >> 4;
-		}
-		
-		shift = 4;
-		
-		for (i = 4; i > 0; i--) {
-			reversed += ((address & mask) << shift);
-			shift += 8;
-			mask = mask >> 4;
-		}
-	}	
 	
-	if (dataHead != NULL) {
+	if (dataHead != NULL && RW) {
 		//dataHead[0] = reversed;
 		for (i = 0; i < 64; i++) {
-			dataHead[i] = i; 
+			dataHead[i] = 0; 
 		}
+		dataHead[(address & OFFSET)] = (address & OFFSET);
 	}
 }

@@ -2,8 +2,9 @@
 #define __L2_H__
 
 #include "cachestats.h"
+#include "cache.h"
 #include <stdlib.h>
-
+#include <stdio.h>
 
 #define L2_read(address, data)	_L2_service(address, data, NULL, 1)
 #define L2_write(address, data)	_L2_service(address, NULL, NULL, 0)
