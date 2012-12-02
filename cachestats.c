@@ -30,6 +30,7 @@ void cachestat_print(CacheStats *s)
     debug_printf("\n");
     debug_printf("Total Invalidates: %lu\n", s->cache_invalidates);
     printf("=====================================\n");
+    printf("\n");
 }
 
 void cachestat_init(CacheStats *s)
